@@ -2,27 +2,23 @@ const { PDFDocument } = require("pdf-lib")
 const fs = require('fs');
 
 
-const createPDF = async() => {
+const createPDF = async () => {
     try {
-
         const pdfDoc = await PDFDocument.load(fs.readFileSync(`./template/app.pdf`), {
             ignoreEncryption: true,
             throwOnInvalidObject: true,
         });
         const form = pdfDoc.getForm();
-
-          let fieldNames = pdfDoc.getForm().getFields();
-          fieldNames = fieldNames.map(f => f.getName())
+        let fieldNames = pdfDoc.getForm().getFields();
+        fieldNames = fieldNames.map(f => f.getName())
         console.log(fieldNames)
-          let coiIndex = fieldNames.indexOf('connectionLink')
-          if (coiIndex >= 0 ) {
+        let coiIndex = fieldNames.indexOf('connectionLink')
+        if (coiIndex >= 0) {
             form.getTextField(fieldNames[coiIndex]).setText('https://www.appgambit.com/')
-
-          }
-          fs.writeFileSync("appgambit-write.pdf", await pdfDoc.save());
+        }
+        fs.writeFileSync("appgambit-write.pdf", await pdfDoc.save());
     } catch (error) {
         console.log(error)
     }
 }
-
 createPDF()

@@ -1,14 +1,12 @@
-const { PageSizes, StandardFonts, rgb, PDFAcroField, PDFDocument, PDFName, PDFSignature, PDFAcroSignature, PDFWidgetAnnotation, AnnotationFlags
- } = require('pdf-lib');
+const { PageSizes, StandardFonts, rgb, PDFAcroField, PDFDocument, PDFName, PDFSignature, PDFAcroSignature, PDFWidgetAnnotation, AnnotationFlags } = require('pdf-lib');
 const { PDFDict } = PDFAcroField;
 var fs = require('fs');
 
-function calculateTextWidth (text, font, fontSize) {
+function calculateTextWidth(text, font, fontSize) {
     return font.widthOfTextAtSize(text, fontSize);
 }
 
 const openMailTo = (subject) => {
-    // console.warn(subject)
     this.mailDoc({
         cTo: 'custom-lib-pdf@yopmail.com',
         cSubject: subject,
@@ -80,7 +78,7 @@ const createSignature = (page, name, x, y, width, height) => {
         page.doc.context,
         sigField.ref
     )
-    sigWidget.setRectangle({ x, y, width, height, borderColor:rgb(1,1,1) })
+    sigWidget.setRectangle({ x, y, width, height, borderColor: rgb(1, 1, 1) })
     sigWidget.setP(page.ref)
     sigWidget.setFlagTo(AnnotationFlags.Print, true)
     sigWidget.setFlagTo(AnnotationFlags.Hidden, false)
@@ -89,27 +87,6 @@ const createSignature = (page, name, x, y, width, height) => {
     sigField.acroField.addWidget(sigWidgetRef)
     page.node.addAnnot(sigWidgetRef)
 }
-
-const validationScript = `
-app.alert('Start');
-console.println("Call validation");
-function validateAlphaInput() {
-    var fieldValue = this.getField('wo_activity_1_0').value;
-    console.println("value:" + '-'+ fieldValue);
-    var regex = /^[A-Za-z]{0,3}$/; // Only allow alphabetical characters up to 3
-    console.println(fieldValue + ' == ' + !regex.test(fieldValue))
-    if (!regex.test(fieldValue)) {
-        // resetForm(["wo_activity_1_0"]);
-        event.value = '';
-        app.alert('Please enter only three alphabetical characters.');
-        
-        event.rc = false; // Cancel the input
-    }
-}
-this.getField('wo_activity_1_0').setAction('Keystroke', 'validateAlphaInput()');
-`;
-
-
 
 const createEditablePDF = async () => {
     try {
@@ -135,10 +112,10 @@ const createEditablePDF = async () => {
         pdfDoc.setCreationDate(new Date())
 
         let headerI = 'APPGAMBIT', headerII = 'Second Sub Header';
-        let fontSize=14;
+        let fontSize = 14;
         let lineHeight = 1.0 * fontSize;
         const xStart = 15;
-        
+
         let headerWidth = calculateTextWidth(headerI, fontBold, fontSize)
         let centerX = ((pageOne.getWidth() - headerWidth) / 2);
         let pageOneY = pageOne.getHeight() - 30;
@@ -151,7 +128,7 @@ const createEditablePDF = async () => {
 
         pageOneY -= 5;
         pageOne.drawLine({ start: { x: 5, y: pageOneY }, end: { x: pageOne.getWidth() - 5, y: pageOneY }, color: rgb(0, 0, 0) });
-        
+
         pageOneY -= 25;
         let stdConnection = 'Standard Connection Instructions: '
         pageOne.drawText(stdConnection, { x: xStart, y: pageOneY, font: font, size: fontSize });
@@ -211,32 +188,30 @@ const createEditablePDF = async () => {
                             // activityField.setTooltip('Enter numeric value only');
                             // activityField.setText(text)
                             // activityField.setMaxLength(3)
-                            activityField.setMaxLength(10); 
+                            activityField.setMaxLength(10);
                         }
-                    } 
+                    }
                 }
                 x += (cellWidth[colIndex] + 6);
             }
-            pageOneY-=25
+            pageOneY -= 25
         }
 
-         pdfDoc.addJavaScript(
-            'main',
-            'console.show(); console.println("Hello World!"); console.println("Hello")'
-        );
+        // pdfDoc.addJavaScript(
+        //     'main',
+        //     'console.show(); console.println("Hello World!"); console.println("Hello")'
+        // );
 
-        // app.alert('Please enter only three alphabetical characters.');
-        pdfDoc.addJavaScript('form-validation',validationScript);
         let colorBackgroundText = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the\nindustry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type\nand scrambled it to make a type specimen book. It has survived not only five centuries, but also the\nleap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with\nthe release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing\nsoftware like Aldus PageMaker including versions of Lorem Ipsum.`
         // const maxWidth = pageOne.getWidth() - 2;
         lines = colorBackgroundText.split('\n');
         const totalHeight = lines.length * font.heightAtSize(14) + 10;
-        
-        pageOneY-= totalHeight
+
+        pageOneY -= totalHeight
 
         const startY = pageOneY;
         pageOne.drawRectangle({
-            x: xStart -10, //(xStart - 2),
+            x: xStart - 10, //(xStart - 2),
             y: startY + font.heightAtSize(fontSize) + 4,
             width: pageOne.getWidth() - 10,
             height: totalHeight,
@@ -247,11 +222,11 @@ const createEditablePDF = async () => {
         // set the lines of text
         (lines.reverse()).forEach((line, index) => {
             y = startY + (index + 2) * font.heightAtSize(fontSize);
-            pageOne.drawText(line, { x: xStart, y, height: lineHeight + 5, font: font, size: fontSize,  });
+            pageOne.drawText(line, { x: xStart, y, height: lineHeight + 5, font: font, size: fontSize, });
         });
 
 
-        pageOneY-=20;
+        pageOneY -= 20;
         pageOne.drawText('COMMENTS:', { x: xStart, y: pageOneY, font: fontBold, size: fontSize });
         const textFieldHeight = 80;
         const textField = {
@@ -267,29 +242,29 @@ const createEditablePDF = async () => {
         textareaField.addToPage(pageOne, textField);
         textareaField.setFontSize(10)
 
-        pageOneY-= (textFieldHeight + 80);
+        pageOneY -= (textFieldHeight + 80);
         createSignature(pageOne, `formSign`, 255, pageOneY, 300, 60)
 
         const signatureMsg = "------------------------------------------------------------------------------ \n Authorized EOIR Representative’s Signature".split('\n');
-            signatureMsg.forEach((line, index) => {
-                const centerPosition = index ? 290 : 250;
-                pageOne.drawText(line, { x: centerPosition, y: index ? 210 : 220, font: font, size: 12, });
-            });
+        signatureMsg.forEach((line, index) => {
+            const centerPosition = index ? 290 : 250;
+            pageOne.drawText(line, { x: centerPosition, y: index ? 210 : 220, font: font, size: 12, });
+        });
 
-        pageOneY-= 80;
+        pageOneY -= 80;
         setSubmitButton(pdfDoc, pageOne, form, font, xStart, pageOneY)
-        
+
 
         const notesStartY = 100;
-        setParagraph(pageOne, colorBackgroundText, fontItalic, xStart + 10,notesStartY, 12, 1 * 14)
+        setParagraph(pageOne, colorBackgroundText, fontItalic, xStart + 10, notesStartY, 12, 1 * 14)
 
 
         // SecondPage
         let text = 'Appgambit Second Page';
         let x = calculateTextWidth(text, fontBoldItalic, fontSize)
         let pageTwoY = pageTwo.getHeight() / 2;
-        pageTwo.drawText(text, { x: centerX, y: pageTwoY, font: fontBold, size: fontSize });    
-            
+        pageTwo.drawText(text, { x: centerX, y: pageTwoY, font: fontBold, size: fontSize });
+
         fs.writeFileSync("appgambit.pdf", await pdfDoc.save());
         console.log('pdf generated successfully!')
 
