@@ -1,0 +1,26 @@
+{
+  "name": "pdflib",
+  "version": "1.0.0",
+  "description": "scripts to generate PDF Form template with node.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "load-template": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yogesh073/node-pdfLib.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yogesh073/node-pdfLib/issues"
+  },
+  "homepage": "https://github.com/yogesh073/node-pdfLib#readme",
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
