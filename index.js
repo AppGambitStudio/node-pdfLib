@@ -244,7 +244,7 @@ const createEditablePDF = async () => {
         pageOneY -= (textFieldHeight + 80);
         createSignature(pageOne, `formSign`, 255, pageOneY, 300, 60)
 
-        const signatureMsg = "------------------------------------------------------------------------------ \n Authorized EOIR Representative’s Signature".split('\n');
+        const signatureMsg = "------------------------------------------------------------------------------ \n Authorized Representative’s Signature".split('\n');
         signatureMsg.forEach((line, index) => {
             const centerPosition = index ? 290 : 250;
             pageOne.drawText(line, { x: centerPosition, y: index ? 210 : 220, font: font, size: 12, });
