@@ -51,7 +51,6 @@ const setParagraph = (page, str, font, x, y, fontSize, lineHeight) => {
     let lines = str.split('\n');
     if (lines && lines.length) {
         lines.forEach((line, index) => {
-            //   page.drawText(line, { x: centerX, y: centerY - index * lineHeight, font: font, fontSize });
             page.drawText(line, { x: x, y: y - (index + 1) * lineHeight, font: font, size: fontSize });
         });
     }
@@ -103,15 +102,15 @@ const createEditablePDF = async () => {
         // form
         const form = pdfDoc.getForm();
 
-        pdfDoc.setTitle('Appgambit')
+        pdfDoc.setTitle('APPGAMBiT')
         // pdfDoc.setAuthor('')
         pdfDoc.setSubject('Create Editable PDF📖')
-        pdfDoc.setKeywords(['PDF', 'Appgambit', 'Edit'])
-        pdfDoc.setProducer('Elisa')
+        pdfDoc.setKeywords(['PDF', 'APPGAMBiT', 'Edit'])
+        pdfDoc.setProducer('APPGAMBiT')
         pdfDoc.setCreator('Yogesh Rajput')
         pdfDoc.setCreationDate(new Date())
 
-        let headerI = 'APPGAMBIT', headerII = 'Second Sub Header';
+        let headerI = 'APPGAMBiT', headerII = 'Second Sub Header';
         let fontSize = 14;
         let lineHeight = 1.0 * fontSize;
         const xStart = 15;
@@ -260,14 +259,15 @@ const createEditablePDF = async () => {
 
 
         // SecondPage
-        let text = 'Appgambit Second Page';
+        let text = 'APPGAMBiT Second Page';
         let x = calculateTextWidth(text, fontBoldItalic, fontSize)
         let pageTwoY = pageTwo.getHeight() / 2;
         pageTwo.drawText(text, { x: centerX, y: pageTwoY, font: fontBold, size: fontSize });
 
-        fs.writeFileSync("appgambit.pdf", await pdfDoc.save());
-        console.log('pdf generated successfully!')
-
+        fs.writeFileSync("./template/template.pdf", await pdfDoc.save());
+        console.log('pdf generated successfully!');
+        console.log('Check "template" folder for the output file.');
+        console.log('Now you can run the "node template.js" to use the same template and fill with values.');
     } catch (error) {
         console.error('Error while creating the PDF', error)
     }

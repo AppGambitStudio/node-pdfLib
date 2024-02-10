@@ -1,19 +1,21 @@
 # PDF-Lib with NodeJS
-scripts to generate PDF Form template with node.js
 
-# PDF-Lib with NodeJS
-v16.20.1
+This is a sample repo to generate PDF Forms.
+This is tested with Node v16.20.1.
 
-# Setup
+# Generate Editable PDF Forms
+
 ```bash
 npm i
-npm start 
 node index.js
 ```
-# Reuse template
+
+# Use Existing Template
+
 ```bash
 node template.js
 ```
 
-# Template will created like
+# Template Output
+
 ![](./images/my-pdf.png)
