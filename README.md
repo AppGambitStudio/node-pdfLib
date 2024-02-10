@@ -18,4 +18,4 @@ node template.js
 
 # Template Output
 
-![](./images/my-pdf.png)
+![](./images/template.png)
